@@ -4,7 +4,7 @@
 
 [简体中文](README.md) · English
 
-`learning-code` is a source-code teaching skill for Codex. It guides the assistant through a project's actual call chain, then produces a self-contained HTML lesson with code on the left and explanations on the right. Clicking an explanation highlights its source lines and scrolls them into view.
+`learning-code` is a source-code teaching skill that can be installed in Codex and Claude Code. It guides the assistant through a project's actual call chain, then produces a self-contained HTML lesson with code on the left and explanations on the right. Clicking an explanation highlights its source lines and scrolls them into view.
 
 Use it to learn an unfamiliar project, study a framework one lesson at a time, or prepare for implementation-level interview questions. Lessons are Chinese by default; this English introduction does not imply a fully translated English lesson interface.
 
@@ -23,28 +23,49 @@ The screenshot uses the repository's synthetic example to show explanation-to-so
 
 The renderer extracts, validates, and formats content. The assistant still needs to read the project and author the explanations, question selection, and design analysis. Running the script alone does not teach or summarize an entire repository.
 
-## Install in Codex
+## Installation
 
-Clone into a skill directory that does not already exist:
+HTML generation requires **Python 3.9+** and uses only the standard library. Optional browser checks additionally require Node.js, Playwright, and an available Chromium or Edge browser. The repository does not install those dependencies automatically.
+
+Choose the directory for your tool. If `learning-code` is already installed there, inspect the existing version and local changes before merging updates. Do not overwrite it blindly.
+
+### Codex
+
+Clone into Codex's personal skill directory:
 
 ```bash
 mkdir -p ~/.codex/skills
 git clone https://github.com/ddherm/learning-code.git ~/.codex/skills/learning-code
 ```
 
-If `learning-code` is already installed there, inspect the existing version and local changes before merging updates. Do not overwrite it blindly. Reload skills in your Codex session before invoking it.
+Reload skills in your Codex session, then invoke it with `$learning-code`.
 
-HTML generation requires **Python 3.9+** and uses only the standard library. Optional browser checks additionally require Node.js, Playwright, and an available Chromium or Edge browser. The repository does not install those dependencies automatically.
+### Claude Code
+
+Clone the same repository into Claude Code's personal skill directory to make it available across projects on this machine. See the [official skills documentation](https://code.claude.com/docs/en/skills#choose-where-skills-load).
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/ddherm/learning-code.git ~/.claude/skills/learning-code
+```
+
+Start Claude Code in your project directory, then enter:
+
+```text
+/learning-code Create the first Chinese HTML lesson following this project's tutorial.md.
+```
+
+Both tools use the same `SKILL.md`, reference documents, and scripts. Allow the assistant to read project files and run the relevant commands. Compatibility with Claude Code's skill format and the scripts' dependencies has been reviewed; generating a complete lesson within Claude Code has not yet been tested.
 
 ## Use the skill
 
-In a Codex session with access to your project, provide the project path, syllabus, and lesson number.
+In a Codex or Claude Code session with access to your project, provide the project path, syllabus, and lesson number.
 
 In the example below, `interview.md` is a collection of interview material related to your project. It can contain questions asked in past interviews, interview notes, and topics you may be asked about when discussing the project. The skill prioritizes questions from this material that are relevant to the current lesson.
 
 `interview.md` is only an example filename; replace it with the path to your own material. If no suitable interview material is available, the skill generates questions from the lesson's source code and labels them as “New.”
 
-For example:
+The examples below use Codex's invocation syntax. In Claude Code, replace the opening `Use $learning-code to ` with `/learning-code ` and keep the remaining lesson requirements.
 
 ```text
 Use $learning-code to create the Chinese HTML document for lesson 2,

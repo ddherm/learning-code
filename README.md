@@ -4,7 +4,7 @@
 
 简体中文 · [English](README.en.md)
 
-`learning-code` 是一个面向 Codex 的源码教学 skill。它让助手沿真实调用链阅读项目，再把一节课整理成可离线阅读的 HTML：左侧保留源码，右侧解释代码；点击任一解释，对应代码行会高亮并滚动到视野中。
+`learning-code` 是一个可安装到 Codex 和 Claude Code 的源码教学 skill。它让助手沿真实调用链阅读项目，再把一节课整理成可离线阅读的 HTML：左侧保留源码，右侧解释代码；点击任一解释，对应代码行会高亮并滚动到视野中。
 
 适合接手陌生项目、按课学习框架，以及从实现细节准备技术面试。课程默认使用中文，英文介绍不代表课程界面已有完整英文版本。
 
@@ -23,28 +23,49 @@
 
 生成脚本负责摘录、校验和排版。课程解释、题目选择和设计判断需要助手结合项目完成；单独运行脚本不会自动理解整个仓库。
 
-## 安装到 Codex
+## 安装
 
-将仓库克隆到尚不存在的技能目录：
+生成 HTML 需要 **Python 3.9+**，只使用标准库。浏览器自动检查是可选步骤，另需 Node.js、Playwright 和可用的 Chromium／Edge 浏览器；仓库不自动安装这些依赖。
+
+按使用的工具选择安装目录。如果目标目录已经有 `learning-code`，先检查已有版本和本地修改，再决定如何合并更新，不要直接覆盖。
+
+### Codex
+
+将仓库克隆到 Codex 的个人技能目录：
 
 ```bash
 mkdir -p ~/.codex/skills
 git clone https://github.com/ddherm/learning-code.git ~/.codex/skills/learning-code
 ```
 
-如果目标目录已经有 `learning-code`，先检查已有版本和本地修改，再决定如何合并更新，不要直接覆盖。使当前 Codex 会话重新加载技能后，即可调用。
+使当前 Codex 会话重新加载技能后，用 `$learning-code` 调用。
 
-生成 HTML 需要 **Python 3.9+**，只使用标准库。浏览器自动检查是可选步骤，另需 Node.js、Playwright 和可用的 Chromium／Edge 浏览器；仓库不自动安装这些依赖。
+### Claude Code
+
+将同一仓库克隆到 Claude Code 的个人技能目录，供本机各项目使用：[官方技能文档](https://code.claude.com/docs/en/skills#choose-where-skills-load)。
+
+```bash
+mkdir -p ~/.claude/skills
+git clone https://github.com/ddherm/learning-code.git ~/.claude/skills/learning-code
+```
+
+在项目目录启动 Claude Code，然后在会话中输入：
+
+```text
+/learning-code 根据当前项目的 tutorial.md，生成第一节课的中文教学 HTML。
+```
+
+两者共用同一份 `SKILL.md`、参考文档和脚本，使用时需要允许助手读取项目文件并运行相关命令。目前已核对 Claude Code 的技能格式和脚本依赖兼容性，尚未在 Claude Code 中完成整节课程生成的实测。
 
 ## 使用方式
 
-在能读取项目文件的 Codex 会话里提供项目路径、课纲和课程编号。
+在能读取项目文件的 Codex 或 Claude Code 会话里提供项目路径、课纲和课程编号。
 
 下例中的 `interview.md` 是你为这个项目收集整理的面经材料，可以包含真实面试中被问到的问题、面试记录，以及围绕该项目可能被追问的知识点。技能会优先从这些材料里挑选与本课相关的课后题。
 
 `interview.md` 只是示例文件名，使用时替换为自己的材料路径即可；没有合适的面经材料时，技能会根据本课源码生成题目，并标注为“新增”。
 
-例如：
+以下示例使用 Codex 的调用写法。在 Claude Code 中，将开头的 `使用 $learning-code，` 换成 `/learning-code `，其余课程要求相同。
 
 ```text
 使用 $learning-code，按照当前项目 tutorial.md 生成第 2 节课的中文教学 HTML。
