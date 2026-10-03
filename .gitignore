@@ -1,0 +1,13 @@
+# Local caches and environment files
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+node_modules/
+.env
+.env.*
+
+# Generated lessons, browser reports, and local notes
+/output/
+/browser-report/

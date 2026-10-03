@@ -1,0 +1,4 @@
+interface:
+  display_name: "learning—code"
+  short_description: "将源码制作成双栏交互课程，含逐行高亮、面经选题和学习迁移"
+  default_prompt: "使用 $learning-code，根据本地项目与课程大纲生成下一节 3–5 小时的源码教学 HTML，并优先从指定面经选择十道无答案题目。"

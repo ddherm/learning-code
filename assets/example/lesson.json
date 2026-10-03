@@ -1,0 +1,191 @@
+{
+  "project_id": "example",
+  "project_name": "源码学习示例",
+  "lesson_id": "C01",
+  "title": "从任务对象到客户端调用",
+  "subtitle": "这是渲染器与交互的小例子，不是完整三小时课程。",
+  "time_budget": {
+    "core_minutes": 15,
+    "optional_minutes": 5
+  },
+  "question_count": 3,
+  "required_symbols": [
+    {
+      "path": "sample.py",
+      "symbol": "Job"
+    },
+    {
+      "path": "sample.py",
+      "symbol": "build_request"
+    },
+    {
+      "path": "sample.py",
+      "symbol": "run"
+    }
+  ],
+  "sections": [
+    {
+      "id": "overview",
+      "title": "01 / 本例读什么",
+      "blocks": [
+        {
+          "kind": "prose",
+          "html": "<p>跟踪 <code>Job → build_request → client.create → strip</code>。每一步当前拿到什么、交出什么？这个小例子只验证教学结构，实际课程要补完整总览、实验和迁移。</p>"
+        }
+      ]
+    },
+    {
+      "id": "code",
+      "title": "02 / 沿调用链读源码",
+      "blocks": [
+        {
+          "kind": "code",
+          "title": "任务对象 Job",
+          "path": "sample.py",
+          "symbol": "Job",
+          "key": [
+            "任务对象负责保存本轮输入。"
+          ],
+          "steps": [
+            {
+              "ranges": [
+                [
+                  3,
+                  4
+                ]
+              ],
+              "paragraphs": [
+                "dataclass 生成常用方法。",
+                "frozen=True 限制字段初始化后的直接赋值。"
+              ]
+            },
+            {
+              "ranges": [
+                [
+                  5,
+                  5
+                ]
+              ],
+              "paragraphs": [
+                "message 是这个任务携带的文本。",
+                "类型标注本身不是运行时输入校验。"
+              ]
+            }
+          ],
+          "call": [
+            "调用方构造 Job，build_request 读取它的 message。"
+          ],
+          "critical": "输入对象里的字段，只有在后续代码读取时才进入客户端请求。"
+        },
+        {
+          "kind": "code",
+          "title": "构建客户端请求",
+          "path": "sample.py",
+          "symbol": "build_request",
+          "key": [
+            "将内部对象转换为接口需要的字典。"
+          ],
+          "steps": [
+            {
+              "ranges": [
+                [
+                  7,
+                  8
+                ]
+              ],
+              "paragraphs": [
+                "函数读取 job.message。",
+                "返回包含 role 与 content 的新字典，尚未调用客户端。"
+              ]
+            }
+          ],
+          "call": [
+            "run 调用 build_request，把所得字典作为 client.create 的参数。"
+          ]
+        },
+        {
+          "kind": "code",
+          "title": "等待与返回（选读）",
+          "path": "sample.py",
+          "symbol": "run",
+          "optional": true,
+          "key": [
+            "等待客户端返回，然后处理结果。"
+          ],
+          "steps": [
+            {
+              "ranges": [
+                [
+                  10,
+                  11
+                ]
+              ],
+              "paragraphs": [
+                "async def 定义协程函数。",
+                "await 等待 create 完成，不等于自动创建后台任务。"
+              ]
+            },
+            {
+              "ranges": [
+                [
+                  12,
+                  12
+                ]
+              ],
+              "paragraphs": [
+                "strip 去掉首尾空白。",
+                "这里假设返回值是字符串；没有展示异常兜底。"
+              ]
+            }
+          ],
+          "call": [
+            "调用方 await run，接收清理后的字符串。"
+          ],
+          "critical": "这一层没有 try/except，客户端异常会向调用方传播。"
+        }
+      ]
+    },
+    {
+      "id": "recap",
+      "title": "03 / 合上代码复述",
+      "blocks": [
+        {
+          "kind": "prose",
+          "html": "<p>解释配置、输入转换和实际调用分别发生在哪里。换成另一个满足 create 接口的客户端，哪些代码可以复用？可用小替身记录参数验证，但不能据此证明远端服务已跑通。</p>"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "title": "输入对象与请求",
+      "question": "你会怎样区分输入对象和对外请求？请用本例说明转换在哪里发生。",
+      "origin": "原题",
+      "original": "你会怎样区分输入对象和对外请求？",
+      "source_note": "合成示例题库 · 第1题",
+      "evidence": {
+        "path": "interview.md",
+        "start": 3,
+        "end": 3
+      }
+    },
+    {
+      "title": "await 与调用顺序",
+      "question": "run 中 await client.create 之后，strip 会在什么时刻执行？若 create 抛异常又会怎样？",
+      "origin": "改编",
+      "original": "使用 await 以后，函数会自动在后台运行吗？",
+      "source_note": "合成示例题库 · 第2题，缩小到本例等待和异常路径",
+      "evidence": {
+        "path": "interview.md",
+        "start": 5,
+        "end": 5
+      }
+    },
+    {
+      "title": "替身验证能证明什么",
+      "question": "怎样用 RecordedClientForOfflineLearning.create(build_request(job)) 这样的替身调用记录检查传入参数？它是否能证明真实服务可用？",
+      "origin": "新增",
+      "source_note": "本例补充：依赖接口和验证边界"
+    }
+  ]
+}
