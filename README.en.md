@@ -38,7 +38,13 @@ HTML generation requires **Python 3.9+** and uses only the standard library. Opt
 
 ## Use the skill
 
-In a Codex session with access to your project, provide the project path, syllabus, and lesson number. For example:
+In a Codex session with access to your project, provide the project path, syllabus, and lesson number.
+
+In the example below, `interview.md` is a collection of interview material related to your project. It can contain questions asked in past interviews, interview notes, and topics you may be asked about when discussing the project. The skill prioritizes questions from this material that are relevant to the current lesson.
+
+`interview.md` is only an example filename; replace it with the path to your own material. If no suitable interview material is available, the skill generates questions from the lesson's source code and labels them as “New.”
+
+For example:
 
 ```text
 Use $learning-code to create the Chinese HTML document for lesson 2,

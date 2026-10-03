@@ -38,7 +38,13 @@ git clone https://github.com/ddherm/learning-code.git ~/.codex/skills/learning-c
 
 ## 使用方式
 
-在能读取项目文件的 Codex 会话里提供项目路径、课纲和课程编号。例如：
+在能读取项目文件的 Codex 会话里提供项目路径、课纲和课程编号。
+
+下例中的 `interview.md` 是你为这个项目收集整理的面经材料，可以包含真实面试中被问到的问题、面试记录，以及围绕该项目可能被追问的知识点。技能会优先从这些材料里挑选与本课相关的课后题。
+
+`interview.md` 只是示例文件名，使用时替换为自己的材料路径即可；没有合适的面经材料时，技能会根据本课源码生成题目，并标注为“新增”。
+
+例如：
 
 ```text
 使用 $learning-code，按照当前项目 tutorial.md 生成第 2 节课的中文教学 HTML。
